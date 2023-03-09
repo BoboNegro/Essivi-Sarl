@@ -1,0 +1,25 @@
+import requests
+from firebase_admin import auth
+import firebase_admin
+from rest_framework.permissions import IsAuthenticated
+from firebase_admin import credentials
+import jwt
+
+
+cred = credentials.Certificate('C:/Users/fabri/Desktop/A.P.Y/backend/credentials.json')
+firebase_admin.initialize_app(cred)
+
+
+
+
+url = f"http://localhost:8000/utilisateurs/all/"
+header = {
+    'Authorization' : 'Bearer eyJhbGciOiAiUlMyNTYiLCAidHlwIjogIkpXVCIsICJraWQiOiAiNThhZTk1ZWY1YThkNGJhZDAwODZhNzM1MTZmMmQwMDBkZGZhZjA1NiJ9.eyJpc3MiOiAiZmlyZWJhc2UtYWRtaW5zZGsteWRlcXpAZXNzaXZpc2FybC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsICJzdWIiOiAiZmlyZWJhc2UtYWRtaW5zZGsteWRlcXpAZXNzaXZpc2FybC5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsICJhdWQiOiAiaHR0cHM6Ly9pZGVudGl0eXRvb2xraXQuZ29vZ2xlYXBpcy5jb20vZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCAidWlkIjogIk9UeDhhdTliYmhmSkdndlViZ09SOFhLWUoyMDIiLCAiaWF0IjogMTY3ODMxMDM4MCwgImV4cCI6IDE2NzgzMTM5ODB9.EU6T6QN8ALkDO8IrVbsJA8hKrwf6tSFdR-8WUazGmAWR2Dq_11Gci4AKQP00bzXYomwZsr2Slivc23wkPQwS_Cd02_JI1jJvaHzFh2voTO-GJwWTLehdM9V5vhCJErdUOzaE_Sf4n_S2_SXUBV5ZQ-f9OQCgzJ1QEkTCfTsOqz1B0h_f3Y_-GvZJD8x_9zW-dCKs5UvswWOkEkd0eldNv71uVQQRFALnbmP4JWuXx2-8isvVRz3jPWeowx6jfm8CUqbYcs14LWCOgsr6QmsTq8aSVAJPyytjcuneyJwgN3-xmoyZXfU21BEunvHiTglYEEIXJCxhOJYtTbAFOBOFfg'
+}
+
+
+
+public_key = 'BCQYVEIcyLwKeh4Nf6AJLg6zc3DBv91j7als0t1wlLq5E3_Mx10idhknGSvby4go4C_9qCXntv8v8Xc1cxt1HMA'
+
+decoded_token = jwt.decode(jwt=custom_token, key=public_key, algorithms=['RS256'])
+
