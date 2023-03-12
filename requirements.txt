@@ -53,6 +53,7 @@ python-jose==3.3.0
 python-jwt==2.0.1
 pytz==2022.7.1
 requests
+requests
 requests-toolbelt==0.10.1
 rsa==4.9
 six==1.16.0
