@@ -15,6 +15,10 @@ from pyrebase import pyrebase
 import django_heroku
 import dj_database_url
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 CONFIG = {
     "apiKey": "AIzaSyCzTkvHJxxMy9IU3vCVEaRSgJI_0FIlPvo",
     "authDomain": "essivisarl.firebaseapp.com",
@@ -61,6 +65,15 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION8_CLASSES":[
+        "authentification.authentication.JWTTokenAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES":[
+        "authentification.authentication.CustomIsAuthenticated",
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

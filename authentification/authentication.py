@@ -1,4 +1,4 @@
-from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.authentication import BaseAuthentication, get_authorization_header, TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
 from django.conf import settings
@@ -20,12 +20,11 @@ class JWTTokenAuthentication(BaseAuthentication):
         try:
             token = auth_header[1].decode()
             decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            print(decoded_token['user'][0])
-            uid = decoded_token.get('user')
-            if uid is None:
-                raise AuthenticationFailed('Invalid token. User ID not found.')
-            user = Utilisateur.objects.get_or_create(username=uid)[0]
-            return user, decoded_token
+            print(decoded_token)
+            user = decoded_token.get('user')
+            if user is None:
+                raise AuthenticationFailed('Invalid token. User not found.')
+            return user, token
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token signature has expired.')
         except jwt.DecodeError:
@@ -34,3 +33,13 @@ class JWTTokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed('User not found.')
         except Exception as e:
             raise AuthenticationFailed('Unable to verify token: {}'.format(str(e)))
+
+
+
+class CustomIsAuthenticated():
+    """
+    Allows access only to authenticated users.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.data)

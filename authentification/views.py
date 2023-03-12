@@ -10,7 +10,7 @@ from firebase_admin import credentials
 from .serializer import AuthSerializer, UtilisateurSerializer, UtilisateurSerializerGet
 from rest_framework import status
 import uuid
-from .authentication import JWTTokenAuthentication
+from .authentication import CustomIsAuthenticated, JWTTokenAuthentication
 import jwt
 import datetime
 
@@ -27,7 +27,7 @@ class UtilisateursControllers(APIView):
 
     @api_view(['GET'])
     @authentication_classes([JWTTokenAuthentication])
-    @permission_classes([IsAuthenticated])
+    @permission_classes([CustomIsAuthenticated])
     def api_view_get_all(request):
 
         if request.method != 'GET':
@@ -114,7 +114,7 @@ class UtilisateursControllers(APIView):
     @api_view(['POST'])
     def api_view_post_login(request):
         serializer = AuthSerializer(data=request.data)
-        serializerGet = UtilisateurSerializerGet(data=request.data)
+        serializerGet = UtilisateurSerializerGet(data0=request.data)
         if serializer.is_valid():
             try:
                 email = serializer.data['email']
@@ -122,13 +122,14 @@ class UtilisateursControllers(APIView):
                 userf = DB.child("Utilisateurs").order_by_child("email").equal_to(email).get()
                 data = userf.val()
                 var = [data[i] for i in data]
-                password = var[0]['password']
+                #password = var[0]['password']
+                password = var[0].get('password')
                 user =  user = auth.get_user_by_email(email)
                 if user and password == serializer.data['password']:
                   
                   secret_key = settings.SECRET_KEY
                     # Définir la date d'expiration du token
-                  expires_at = datetime.datetime.utcnow() + datetime.timedelta(minutes=3000)
+                  expires_at = datetime.datetime.utcnow() + datetime.timedelta(minutes=120)
 
                     # Créer le token JWT
                   token = jwt.encode({'user': var[0], 'exp': expires_at}, secret_key, algorithm='HS256')
@@ -164,3 +165,4 @@ class UtilisateursControllers(APIView):
 
 
 
+ 
